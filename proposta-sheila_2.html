@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Estratégica — Delícia de Bolo na Caixa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --preto: #1A1A18;
+    --offwhite: #FAFAF7;
+    --dourado: #C9A96E;
+    --rosa: #C9A96E; /* alias do dourado */
+    --cinza: #6B6B68;
+    --cinza-claro: #E8E8E5;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--offwhite); color: var(--preto);
+    font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(26,26,24,0.97); backdrop-filter: blur(8px);
+    padding: 14px 48px; display: flex; gap: 24px; align-items: center;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    overflow-x: auto; white-space: nowrap;
+  }
+  .nav a {
+    color: rgba(250,250,247,0.55); text-decoration: none; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; flex-shrink: 0;
+  }
+  .nav a:hover { color: var(--dourado); }
+
+  /* HERO */
+  .hero {
+    background: var(--preto); min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; padding: 64px 48px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; right: 0; width: 50%; height: 100%;
+    background: linear-gradient(135deg, transparent 30%, rgba(201,134,110,0.06) 100%); pointer-events: none;
+  }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dourado); margin-bottom: 32px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 6vw, 82px); font-weight: 300; line-height: 1.05; color: var(--offwhite); max-width: 760px; margin-bottom: 24px; }
+  .hero-title em { font-style: italic; color: var(--dourado); }
+  .hero-sub { font-size: 15px; font-weight: 300; color: rgba(250,250,247,0.55); max-width: 540px; margin-bottom: 48px; line-height: 1.8; }
+  .hero-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .hero-meta-item label { display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 4px; }
+  .hero-meta-item span { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--offwhite); font-weight: 400; }
+
+  section { padding: 88px 48px; max-width: 980px; margin: 0 auto; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dourado); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--dourado); opacity: 0.25; max-width: 48px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 46px); font-weight: 400; line-height: 1.2; margin-bottom: 24px; }
+  .section-title em { font-style: italic; color: var(--dourado); }
+  .section-body { font-size: 15px; font-weight: 300; color: var(--cinza); line-height: 1.8; max-width: 640px; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--dourado), transparent); opacity: 0.15; margin: 0 48px; }
+
+  /* CARD DE DIAGNÓSTICO */
+  .diagnostico-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 48px; background: var(--cinza-claro); }
+  .diagnostico-item { background: var(--offwhite); padding: 32px; }
+  .diagnostico-item.destaque { background: var(--preto); }
+  .diagnostico-item.destaque .diagnostico-label { color: var(--offwhite); }
+  .diagnostico-item.destaque .diagnostico-text { color: rgba(250,250,247,0.6); }
+  .diagnostico-numero { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--dourado); margin-bottom: 10px; letter-spacing: 0.1em; }
+  .diagnostico-label { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; line-height: 1.2; }
+  .diagnostico-text { font-size: 13px; font-weight: 300; color: var(--cinza); line-height: 1.7; }
+
+  /* FORMULÁRIO RESPONDIDO */
+  .formulario-item {
+    padding: 32px 0; border-bottom: 1px solid var(--cinza-claro);
+    display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start;
+  }
+  .formulario-pergunta { font-size: 12px; font-weight: 400; color: var(--cinza); line-height: 1.6; text-transform: uppercase; letter-spacing: 0.05em; }
+  .formulario-resposta { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; line-height: 1.4; color: var(--preto); }
+  .formulario-resposta em { font-style: italic; color: var(--dourado); }
+  .formulario-insight { font-size: 12px; font-weight: 300; color: var(--dourado); margin-top: 8px; font-style: italic; }
+
+  /* DIAGNÓSTICO DO PERFIL */
+  .perfil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 48px; background: var(--cinza-claro); }
+  .perfil-item { background: var(--offwhite); padding: 28px 32px; }
+  .perfil-item.problema { background: var(--preto); }
+  .perfil-item.problema .perfil-titulo { color: var(--offwhite); }
+  .perfil-item.problema .perfil-texto { color: rgba(250,250,247,0.6); }
+  .perfil-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 8px; }
+  .perfil-titulo { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; margin-bottom: 8px; line-height: 1.3; }
+  .perfil-texto { font-size: 13px; font-weight: 300; color: var(--cinza); line-height: 1.7; }
+
+  /* HISTÓRIA */
+  .historia-box { background: var(--preto); padding: 56px; position: relative; overflow: hidden; margin-top: 48px; }
+  .historia-box::after { content: ''; position: absolute; bottom: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(201,169,110,0.08), transparent 70%); }
+  .historia-titulo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--offwhite); line-height: 1.3; margin-bottom: 20px; }
+  .historia-titulo em { font-style: italic; color: var(--dourado); }
+  .historia-texto { font-size: 14px; font-weight: 300; color: rgba(250,250,247,0.65); line-height: 1.9; max-width: 600px; }
+  .historia-texto strong { color: var(--offwhite); font-weight: 500; }
+
+  /* PILARES */
+  .pilares-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 48px; background: var(--cinza-claro); }
+  .pilar-item { background: var(--offwhite); padding: 32px; }
+  .pilar-num { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--cinza-claro); margin-bottom: 12px; line-height: 1; }
+  .pilar-titulo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; margin-bottom: 10px; line-height: 1.3; }
+  .pilar-texto { font-size: 13px; font-weight: 300; color: var(--cinza); line-height: 1.7; }
+
+  /* TABS */
+  .tabs-nav { display: flex; gap: 2px; margin-top: 48px; background: var(--cinza-claro); flex-wrap: wrap; }
+  .tab-btn { flex: 1; min-width: 120px; padding: 16px; background: var(--offwhite); border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cinza); transition: all 0.2s; }
+  .tab-btn.active { background: var(--preto); color: var(--dourado); }
+  .tab-content { display: none; padding: 40px; background: var(--offwhite); border: 1px solid var(--cinza-claro); border-top: none; }
+  .tab-content.active { display: block; }
+  .canal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .canal-titulo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; }
+  .canal-titulo em { font-style: italic; color: var(--dourado); }
+  .canal-freq-badge { background: var(--preto); color: var(--dourado); padding: 8px 18px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+  .canal-funcao { font-size: 14px; font-weight: 300; color: var(--cinza); line-height: 1.8; margin-bottom: 24px; max-width: 600px; }
+  .entrega-lista { list-style: none; }
+  .entrega-lista li { font-size: 13px; font-weight: 300; color: var(--cinza); padding: 9px 0; border-bottom: 1px solid var(--cinza-claro); padding-left: 16px; position: relative; line-height: 1.6; }
+  .entrega-lista li::before { content: '·'; position: absolute; left: 0; color: var(--dourado); font-size: 18px; line-height: 1; }
+  .entrega-lista li strong { color: var(--preto); font-weight: 500; }
+
+  /* 90 DIAS */
+  .dias-grid { display: flex; flex-direction: column; gap: 2px; background: var(--cinza-claro); margin-top: 48px; }
+  .dia-item { padding: 32px 36px; }
+  .dia-item.dark { background: var(--preto); }
+  .dia-item.light { background: var(--offwhite); }
+  .dia-item.gold { background: var(--dourado); }
+  .dia-mes { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+  .dia-item.dark .dia-mes { color: var(--dourado); }
+  .dia-item.light .dia-mes { color: var(--dourado); }
+  .dia-item.gold .dia-mes { color: var(--preto); font-weight: 500; }
+  .dia-titulo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; margin-bottom: 10px; line-height: 1.3; }
+  .dia-item.dark .dia-titulo { color: var(--offwhite); }
+  .dia-item.gold .dia-titulo { color: var(--preto); }
+  .dia-texto { font-size: 13px; font-weight: 300; line-height: 1.8; }
+  .dia-item.dark .dia-texto { color: rgba(250,250,247,0.6); }
+  .dia-item.light .dia-texto { color: var(--cinza); }
+  .dia-item.gold .dia-texto { color: rgba(26,26,24,0.75); }
+
+  /* BONUS */
+  .bonus-box { border: 1px solid var(--cinza-claro); border-left: 3px solid var(--dourado); padding: 32px; margin-bottom: 2px; }
+  .bonus-eyebrow { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 8px; }
+  .bonus-titulo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+  .bonus-texto { font-size: 13px; font-weight: 300; color: var(--cinza); line-height: 1.8; }
+
+  /* FIDELIZACAO */
+  .fidelizacao-box { background: var(--preto); padding: 48px; margin-top: 48px; }
+  .fidelizacao-titulo { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: var(--offwhite); margin-bottom: 12px; }
+  .fidelizacao-titulo em { font-style: italic; color: var(--dourado); }
+  .fidelizacao-texto { font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.6); line-height: 1.8; max-width: 580px; }
+
+  /* INVESTIMENTO */
+  .invest-wrapper { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--cinza-claro); }
+  .invest-box { background: var(--preto); padding: 48px; }
+  .invest-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 16px; }
+  .invest-de { font-size: 14px; font-weight: 300; color: rgba(250,250,247,0.3); margin-bottom: 4px; text-decoration: line-through; }
+  .invest-valor { font-family: 'Cormorant Garamond', serif; font-size: 60px; font-weight: 300; color: var(--offwhite); line-height: 1; margin-bottom: 8px; }
+  .invest-valor span { font-size: 20px; vertical-align: super; }
+  .invest-periodo { font-size: 12px; font-weight: 300; color: rgba(250,250,247,0.35); margin-bottom: 32px; }
+  .invest-lista { list-style: none; }
+  .invest-lista li { font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.65); padding: 8px 0; border-bottom: 1px solid rgba(250,250,247,0.07); display: flex; align-items: center; gap: 10px; }
+  .invest-lista li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--dourado); flex-shrink: 0; }
+  .invest-lista li strong { color: var(--offwhite); font-weight: 500; }
+  .invest-incluso { background: var(--offwhite); padding: 48px; }
+  .invest-incluso-titulo { font-family: 'Cormorant Garamond', serif; font-size: 22px; margin-bottom: 24px; line-height: 1.3; }
+  .invest-incluso-lista { list-style: none; }
+  .invest-incluso-lista li { font-size: 13px; font-weight: 300; color: var(--cinza); padding: 9px 0; border-bottom: 1px solid var(--cinza-claro); display: flex; align-items: center; gap: 10px; }
+  .invest-incluso-lista li::before { content: '✓'; color: var(--dourado); font-size: 11px; flex-shrink: 0; }
+
+  /* CTA */
+  .cta-section { background: var(--offwhite); padding: 88px 48px; text-align: center; border-top: 1px solid var(--cinza-claro); }
+  .cta-eyebrow { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dourado); margin-bottom: 20px; }
+  .cta-titulo { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 400; line-height: 1.25; margin-bottom: 20px; }
+  .cta-titulo em { font-style: italic; color: var(--dourado); }
+  .cta-sub { font-size: 14px; font-weight: 300; color: var(--cinza); max-width: 460px; margin: 0 auto 40px; line-height: 1.8; }
+  .cta-btn { display: inline-block; background: var(--preto); color: var(--dourado); text-decoration: none; padding: 18px 44px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--dourado); }
+
+  /* ASSINATURA */
+  .assinatura { background: var(--preto); padding: 88px 48px; text-align: center; }
+  .assinatura-nome { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: var(--offwhite); margin-bottom: 4px; }
+  .assinatura-cargo { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 36px; }
+  .assinatura-frase { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; font-weight: 300; color: rgba(250,250,247,0.4); max-width: 480px; margin: 0 auto 44px; line-height: 1.6; }
+  .assinatura-contato { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .assinatura-contato div label { display: block; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 4px; }
+  .assinatura-contato div span { font-size: 13px; color: rgba(250,250,247,0.5); }
+
+  @media (max-width: 768px) {
+    .hero, section { padding: 56px 24px; }
+    .diagnostico-grid, .perfil-grid, .pilares-grid, .invest-wrapper { grid-template-columns: 1fr; }
+    .formulario-item { grid-template-columns: 1fr; gap: 8px; }
+    .tabs-nav { flex-direction: column; }
+    .tab-content { padding: 24px; }
+    .nav { padding: 14px 20px; gap: 16px; }
+    .historia-box { padding: 36px 24px; }
+    .divider { margin: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="28" height="28" style="flex-shrink:0;margin-right:8px;" aria-label="Daniela Paiva">
+  <g fill="none" stroke="#C9A96E" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="100" cy="100" r="84"></circle>
+    <path d="M70,52 L70,156"></path>
+    <path d="M70,52 C104,52 118,76 118,104 C118,132 104,156 70,156"></path>
+    <path d="M150,52 L150,156"></path>
+    <path d="M70,156 L150,52"></path>
+  </g>
+  <circle cx="107" cy="106.5" r="5.5" fill="#C9A96E"></circle>
+</svg>
+  <a href="#quem-ela-e">Quem ela é</a>
+  <a href="#o-que-vimos">O perfil hoje</a>
+  <a href="#o-que-perde">O que perde</a>
+  <a href="#a-alma">A alma da marca</a>
+  <a href="#canais">Canais</a>
+  <a href="#90dias">90 dias</a>
+  <a href="#bonus">Bônus</a>
+  <a href="#investimento">Investimento</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Proposta Estratégica · Julho 2026</p>
+  <h1 class="hero-title">Sheila, eu li cada palavra<br>que você <em>escreveu.</em></h1>
+  <p class="hero-sub">Isso não é uma proposta genérica. É o que eu enxergo no seu negócio depois de entender sua história, seus produtos, sua dor e o que você realmente quer construir nos próximos 90 dias.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><label>Preparado por</label><span>Daniela Paiva</span></div>
+    <div class="hero-meta-item"><label>Para</label><span>Sheila de Oliveira</span></div>
+    <div class="hero-meta-item"><label>Negócio</label><span>Delícia de Bolo na Caixa</span></div>
+  </div>
+</div>
+
+<!-- O QUE ELA DISSE -->
+<section id="quem-ela-e">
+  <p class="section-eyebrow">O que você me disse</p>
+  <h2 class="section-title">Cada resposta foi<br><em>lida com atenção.</em></h2>
+  <p class="section-body">Você preencheu cada campo com sinceridade. Isso me permitiu enxergar muito além do que um perfil no Instagram mostra. Aqui está o que ficou mais marcado, e o que cada resposta revela sobre onde você está e para onde pode ir.</p>
+
+  <div style="margin-top: 48px; display: flex; flex-direction: column;">
+    <div class="formulario-item">
+      <p class="formulario-pergunta">Como você explicaria seu negócio para alguém que nunca ouviu falar dele</p>
+      <div>
+        <p class="formulario-resposta">"Somos uma confeitaria especializada em presentes gastronômicos personalizados. Cada detalhe é pensado com carinho, desde a escolha dos ingredientes até a finalização da embalagem."</p>
+        <p class="formulario-insight">Você já sabe exatamente quem é. O problema é que o seu perfil ainda não conta essa história.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">O que motivou você a começar esse negócio</p>
+      <div>
+        <p class="formulario-resposta">"A Delícia de Bolo na Caixa nasceu em um dos momentos mais desafiadores que o mundo já viveu: a <em>pandemia</em>."</p>
+        <p class="formulario-insight">Três mulheres da mesma família, unidas pela necessidade, criaram algo que vai muito além de um produto. Isso é uma história que o seu público precisa conhecer.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">O que está travando o crescimento das suas redes hoje</p>
+      <div>
+        <p class="formulario-resposta">"Falta de <em>frequência e constância.</em>"</p>
+        <p class="formulario-insight">Você identificou o problema com precisão. E é exatamente isso que vamos resolver.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">O que mais te incomoda nas suas redes sociais</p>
+      <div>
+        <p class="formulario-resposta">"Editar fotos e produzir <em>conteúdo.</em>"</p>
+        <p class="formulario-insight">Essa parte fica com a gente. Você faz o produto. Nós cuidamos do conteúdo.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">Se nada mudar nos próximos 6 meses, o que você imagina que vai acontecer com seu negócio</p>
+      <div>
+        <p class="formulario-resposta">"<em>Fechar no vermelho.</em> Muita frustração."</p>
+        <p class="formulario-insight">Você foi honesta. E essa honestidade é o que me diz que você está pronta para mudar.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">O que seria sucesso para você em 90 dias</p>
+      <div>
+        <p class="formulario-resposta">"Ter <em>organização e estabilidade</em> de clientes e financeira."</p>
+        <p class="formulario-insight">Não viralizar. Não explodir. Estabilizar. Isso define tudo nessa proposta.</p>
+      </div>
+    </div>
+
+    <div class="formulario-item">
+      <p class="formulario-pergunta">Qual produto você quer vender mais e ainda não vende o suficiente</p>
+      <div>
+        <p class="formulario-resposta">"Caixa café da manhã e <em>festa no balão.</em>"</p>
+        <p class="formulario-insight">São também os produtos com melhor margem. O conteúdo vai apontar para eles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DIAGNÓSTICO DO PERFIL -->
+<section id="o-que-vimos">
+  <p class="section-eyebrow">Diagnóstico do perfil</p>
+  <h2 class="section-title">O que eu vejo no seu<br><em>Instagram hoje.</em></h2>
+  <p class="section-body">9.812 seguidores. 643 posts. 6 anos de negócio. O potencial está lá. O que ainda falta é uma presença que comunique o valor real do que você entrega.</p>
+
+  <div class="perfil-grid">
+    <div class="perfil-item problema">
+      <p class="perfil-label">Problema central</p>
+      <p class="perfil-titulo">O perfil não tem alma</p>
+      <p class="perfil-texto">Artes genéricas de Canva, paleta sem padrão, posts que mostram o produto como se fosse um catálogo de supermercado. Quem chega no perfil pela primeira vez não sente nada. E um produto que vende emoção não pode ser apresentado por um perfil que não emociona.</p>
+    </div>
+    <div class="perfil-item">
+      <p class="perfil-label">O que analisamos</p>
+      <p class="perfil-titulo">Visual sem identidade coerente</p>
+      <p class="perfil-texto">Rosa forte, verde tropical, kraft neutro, azul infantil. Cada post parece de uma marca diferente. Isso não é estética, é sinal de ausência de estratégia. E o cérebro do consumidor lê isso como: essa marca não sabe quem ela é.</p>
+    </div>
+    <div class="perfil-item">
+      <p class="perfil-label">O que analisamos</p>
+      <p class="perfil-titulo">Produto rico apresentado de forma pobre</p>
+      <p class="perfil-texto">As caixas são visualmente espetaculares. Produtos artesanais, embalagem trabalhada, entrega que gera reação emocional em quem recebe. Mas as fotos e vídeos não estão capturando isso. O produto vale mais do que o perfil está mostrando.</p>
+    </div>
+    <div class="perfil-item problema">
+      <p class="perfil-label">O que analisamos</p>
+      <p class="perfil-titulo">Nenhum link funcional além do WhatsApp</p>
+      <p class="perfil-texto">A bio tem um único link direto pro WhatsApp. Isso corta a jornada do cliente: quem quer ver o portfólio completo, entender os produtos ou os preços, não tem para onde ir. Cada visita ao perfil que não converte é uma venda que escapa.</p>
+    </div>
+    <div class="perfil-item">
+      <p class="perfil-label">O que analisamos</p>
+      <p class="perfil-titulo">História poderosa completamente invisível</p>
+      <p class="perfil-texto">Você tem uma das histórias de origem mais bonitas que eu já ouvi: três mulheres, uma pandemia, amor transformado em produto. Nenhum seguidor dos seus quase 10 mil sabe disso. Essa história é o maior ativo de marca que você tem, e está guardado numa gaveta.</p>
+    </div>
+    <div class="perfil-item problema">
+      <p class="perfil-label">O que analisamos</p>
+      <p class="perfil-titulo">Postagem rara em plataforma que exige constância</p>
+      <p class="perfil-texto">Você mesma disse: posta raramente. No Instagram de 2026, o algoritmo penaliza ausência e recompensa presença consistente. Cada semana sem postar é uma semana em que o algoritmo entrega você cada vez menos para quem já te segue.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- O QUE ELA PERDE -->
+<section id="o-que-perde">
+  <p class="section-eyebrow">O custo real de continuar assim</p>
+  <h2 class="section-title">O que está sendo<br><em>perdido agora.</em></h2>
+  <p class="section-body">Não é pessimismo. É o que os dados mostram sobre o que acontece quando um produto com alto potencial emocional continua sem presença digital estruturada.</p>
+
+  <div style="background: var(--preto); padding: 56px; margin-top: 48px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <div>
+        <p style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 12px;">Valor percebido</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--offwhite); margin-bottom: 10px; line-height: 1.3;">Um produto artesanal apresentado como se fosse genérico é julgado pelo preço, não pelo valor.</p>
+        <p style="font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.6); line-height: 1.7;">Quando o perfil não transmite cuidado, exclusividade e emoção, o cliente inconscientemente compara sua caixa de R$420 com qualquer doce de padaria. A comunicação está destruindo margem.</p>
+      </div>
+      <div>
+        <p style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 12px;">Credibilidade</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--offwhite); margin-bottom: 10px; line-height: 1.3;">Concorrentes com menos produto e mais presença estão ganhando a confiança do público que poderia ser seu.</p>
+        <p style="font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.6); line-height: 1.7;">No mercado de presentes e confeitaria, quem aparece mais parece mais confiável. Não importa se o produto é inferior. Presença consistente constrói autoridade mesmo onde o produto não é o melhor.</p>
+      </div>
+      <div>
+        <p style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 12px;">Recompra e indicação</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--offwhite); margin-bottom: 10px; line-height: 1.3;">Clientes que amam o produto somem porque não são lembrados.</p>
+        <p style="font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.6); line-height: 1.7;">Você disse que seus clientes vêm principalmente de orgânico e amigos. Isso significa que cada cliente satisfeito poderia trazer outros, mas sem presença constante para lembrá-los de você, esse ciclo não se fecha.</p>
+      </div>
+      <div>
+        <p style="font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dourado); margin-bottom: 12px;">Sazonalidade perdida</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--offwhite); margin-bottom: 10px; line-height: 1.3;">Dia das Mães, Namorados, Dia dos Pais. Datas que deveriam lotar sua agenda chegam e passam sem estrutura.</p>
+        <p style="font-size: 13px; font-weight: 300; color: rgba(250,250,247,0.6); line-height: 1.7;">Negócios de presente precisam chegar na cabeça do cliente antes da data, não no dia. Sem antecipação estratégica de conteúdo, você compete no pior momento: quando todo mundo já decidiu onde vai comprar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- A ALMA DA MARCA -->
+<section id="a-alma">
+  <p class="section-eyebrow">O que vamos construir</p>
+  <h2 class="section-title">A alma que existe<br>mas ainda não <em>aparece.</em></h2>
+  <p class="section-body">Você me disse tudo que eu precisava saber. O negócio tem uma história real, um propósito real e um produto com emoção dentro. O que vai mudar é como isso é comunicado.</p>
+
+  <div class="historia-box">
+    <h3 class="historia-titulo">A história que<br><em>ninguém ainda contou.</em></h3>
+    <p class="historia-texto">
+      Três mulheres. Uma pandemia. Uma família que precisava sobreviver e encontrou no amor um produto.<br><br>
+      <strong>A mãe começou com carne louca. A irmã com bolos caseiros. Você enxergou a oportunidade e transformou em negócio.</strong><br><br>
+      Em 2020, quando as comemorações foram interrompidas e as famílias precisaram se separar, a Delícia de Bolo na Caixa encontrou uma forma de manter as pessoas juntas mesmo à distância: enviando afeto em uma caixa.<br><br>
+      Esse é o produto que você vende. Não é bolo. Não é doce. É a possibilidade de estar presente no momento mais importante de quem a pessoa ama, mesmo quando não dá para estar lá.
+    </p>
+  </div>
+
+  <div class="pilares-grid" style="margin-top: 2px;">
+    <div class="pilar-item">
+      <p class="pilar-num">01</p>
+      <p class="pilar-titulo">Frase de impacto da marca</p>
+      <p class="pilar-texto">Vamos criar uma frase que carrega a essência do que você faz: presentes que fazem pessoas se sentirem amadas. Uma linha que vai da bio ao embrulho.</p>
+    </div>
+    <div class="pilar-item">
+      <p class="pilar-num">02</p>
+      <p class="pilar-titulo">Identidade visual coerente</p>
+      <p class="pilar-texto">Paleta, tipografia e linguagem visual unificadas. Do feed ao stories ao TikTok. Quem chegar no perfil vai saber imediatamente quem é a Delícia de Bolo na Caixa.</p>
+    </div>
+    <div class="pilar-item">
+      <p class="pilar-num">03</p>
+      <p class="pilar-titulo">Narrativa que vende sentimento</p>
+      <p class="pilar-texto">Cada produto vai ter uma história. Não "caixa café da manhã R$330". Mas "o café da manhã que chegou antes da pessoa acordar e ela não esperava". É isso que converte.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CANAIS -->
+<section id="canais">
+  <p class="section-eyebrow">Estratégia por canal</p>
+  <h2 class="section-title">Dois canais,<br><em>funções distintas.</em></h2>
+  <p class="section-body">Instagram e TikTok têm papéis diferentes na jornada de quem ainda não conhece você até quem já comprou e pode comprar de novo.</p>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="showCanal(0, this)">Instagram</button>
+    <button class="tab-btn" onclick="showCanal(1, this)">TikTok</button>
+  </div>
+
+  <div class="tab-content active" id="canal-0">
+    <div class="canal-header">
+      <h3 class="canal-titulo">Insta<em>gram</em></h3>
+      <span class="canal-freq-badge">4 a 5x por semana</span>
+    </div>
+    <p class="canal-funcao"><strong>Função:</strong> relacionamento, conversão e fidelização. É onde sua audiência já existe e onde a maioria das vendas acontece. Vamos transformar esse potencial adormecido em receita consistente.</p>
+    <ul class="entrega-lista">
+      <li><strong>Reels de bastidores:</strong> processo de produção, montagem das caixas, detalhes artesanais. O algoritmo prioriza autenticidade em 2026.</li>
+      <li><strong>Narrativa emocional:</strong> histórias de clientes, momentos de entrega, o que chegou dentro da caixa e o que a pessoa sentiu.</li>
+      <li><strong>Stories diários:</strong> presença constante, enquetes, caixinhas de perguntas, senso de urgência e disponibilidade.</li>
+      <li><strong>Conteúdo sazonal:</strong> calendário estratégico para Dia das Mães, Namorados, Dia dos Pais e Festa Junina, com antecedência real.</li>
+      <li><strong>Foco nos produtos de maior margem:</strong> Caixa Padrão, Balão Festa e Café da Manhã ganham prioridade no conteúdo.</li>
+      <li><strong>Reestruturação da bio:</strong> link funcional com site institucional, frase de impacto, chamada para ação clara.</li>
+    </ul>
+  </div>
+
+  <div class="tab-content" id="canal-1">
+    <div class="canal-header">
+      <h3 class="canal-titulo">Tik<em>Tok</em></h3>
+      <span class="canal-freq-badge">2 a 3x por semana</span>
+    </div>
+    <p class="canal-funcao"><strong>Função:</strong> alcance e descoberta. No TikTok, pessoas que nunca ouviram falar da Delícia de Bolo na Caixa vão encontrar você. É o canal de entrada para novos clientes.</p>
+    <ul class="entrega-lista">
+      <li><strong>Vídeos de montagem e revelação:</strong> o processo de preparar uma caixa, o momento da entrega, a reação de quem recebe. Esse formato performa muito bem no TikTok.</li>
+      <li><strong>Conteúdo emocional curto:</strong> histórias de 30 a 60 segundos que conectam o produto a um sentimento específico.</li>
+      <li><strong>Foco em compartilhamento:</strong> conteúdo que as pessoas queiram mandar para alguém que amam. Esse é o mecanismo de crescimento no TikTok em 2026.</li>
+      <li><strong>Frequência validada:</strong> avaliação ao final do primeiro mês para calibrar o que está gerando mais alcance.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 90 DIAS -->
+<section id="90dias">
+  <p class="section-eyebrow">Plano de execução</p>
+  <h2 class="section-title">O que acontece<br>em cada um dos <em>90 dias.</em></h2>
+  <p class="section-body">Você me disse que quer organização e estabilidade. Isso começa com clareza sobre o que vai ser feito, quando, e por quem.</p>
+
+  <div class="dias-grid">
+    <div class="dia-item dark">
+      <p class="dia-mes">Mês 1 · Semanas 1 e 2 · Fundação</p>
+      <p class="dia-titulo">Construir a alma antes de aparecer</p>
+      <p class="dia-texto">Semana 1: briefing completo, criação da identidade narrativa, frase de impacto da marca, paleta e linguagem visual definidas. Reestruturação da bio, destaques e links do Instagram.<br><br>Semana 2: primeiros conteúdos com a nova identidade publicados. Abertura e configuração do TikTok com a nova identidade. Início da produção do site institucional.</p>
+    </div>
+    <div class="dia-item light">
+      <p class="dia-mes">Mês 1 · Semanas 3 e 4 · Primeiro ritmo</p>
+      <p class="dia-titulo">A marca começa a aparecer com alma</p>
+      <p class="dia-texto">Semana 3: roteiros de conteúdo entregues, você grava, a gente edita e publica. Conteúdo de bastidores e storytelling da origem da marca entra no ar.<br><br>Semana 4: site institucional entregue com catálogo e história da marca. Reunião de revisão do primeiro mês: o que funcionou, o que ajustamos, e decisão sobre continuar.</p>
+    </div>
+    <div class="dia-item gold">
+      <p class="dia-mes">Ponto de decisão · Ao final do mês 1</p>
+      <p class="dia-titulo">Você viu. Você decide.</p>
+      <p class="dia-texto">Com um mês de trabalho entregue e visível, você avalia com clareza se faz sentido continuar. Se sim, seguimos para o ciclo de dois meses. Se não, encerramos sem burocracia e sem dívida.</p>
+    </div>
+    <div class="dia-item light">
+      <p class="dia-mes">Mês 2 · Caso opte por continuar · Consistência</p>
+      <p class="dia-titulo">Presença que educa e aquece o público</p>
+      <p class="dia-texto">Conteúdo diário em ritmo constante nos dois canais. Narrativa emocional de cada produto-chave: café da manhã, caixa padrão, festa no balão. Início da estratégia de fidelização com clientes que já compraram. Planejamento antecipado para a próxima data sazonal.</p>
+    </div>
+    <div class="dia-item dark">
+      <p class="dia-mes">Mês 3 · Colheita</p>
+      <p class="dia-titulo">A marca que as pessoas reconhecem</p>
+      <p class="dia-texto">Ações de fidelização ativas: clientes existentes recebendo conteúdo personalizado e motivo para recomprar. Antecipação da próxima data comemorativa com campanha estruturada. Relatório completo dos 90 dias: o que foi construído, o que cresceu, e o plano para o próximo ciclo.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BONUS -->
+<section id="bonus">
+  <p class="section-eyebrow">Incluído na proposta</p>
+  <h2 class="section-title">O que vai além da<br><em>gestão de redes.</em></h2>
+  <p class="section-body">Porque estabilizar um negócio não é só postar bonito. É construir estrutura de verdade.</p>
+
+  <div style="margin-top: 48px; display: flex; flex-direction: column; gap: 2px;">
+    <div class="bonus-box">
+      <p class="bonus-eyebrow">Bônus 1</p>
+      <p class="bonus-titulo">Site institucional com catálogo</p>
+      <p class="bonus-texto">Hoje você tem um link básico de WhatsApp no Instagram. Vamos substituir por um site com identidade visual da marca, catálogo visual de produtos com preços, a história da Delícia de Bolo na Caixa, e chamada para ação direta para o WhatsApp. Entregue dentro dos primeiros 90 dias.</p>
+    </div>
+
+    <div class="bonus-box">
+      <p class="bonus-eyebrow">Bônus 2</p>
+      <p class="bonus-titulo">Identidade narrativa da marca</p>
+      <p class="bonus-texto">Frase de impacto que representa o negócio. Linguagem de comunicação definida. Guia de voz da marca para que tudo que for publicado tenha a mesma alma, independente do canal ou do formato.</p>
+    </div>
+
+    <div class="bonus-box">
+      <p class="bonus-eyebrow">Bônus 3</p>
+      <p class="bonus-titulo">Roteiros de conteúdo mensais</p>
+      <p class="bonus-texto">Você não vai precisar pensar no que gravar. Todo mês você recebe os roteiros prontos: o que falar, como falar, o que mostrar. Você grava. A gente edita, faz a legenda e publica.</p>
+    </div>
+  </div>
+
+  <div class="fidelizacao-box">
+    <h3 class="fidelizacao-titulo">Estratégia de<br><em>fidelização de clientes.</em></h3>
+    <p class="fidelizacao-texto">Você já tem clientes que amam o que você faz. Vamos criar ações para que essas pessoas continuem comprando, indiquem outras pessoas, e se sintam parte de algo especial. Isso pode ser uma mensagem personalizada no aniversário do cliente, um mimo surpresa em datas inesperadas, ou um ritual de entrega que faça a pessoa querer contar para todo mundo. A estratégia completa é desenhada junto com você depois do fechamento.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INVESTIMENTO -->
+<section id="investimento">
+  <p class="section-eyebrow">Investimento</p>
+  <h2 class="section-title">Tudo que está<br><em>incluído.</em></h2>
+
+  <div class="invest-wrapper">
+    <div class="invest-box">
+      <p class="invest-label">Investimento mensal</p>
+      <p class="invest-de">R$ 750</p>
+      <p class="invest-valor"><span>R$</span> 550</p>
+      <p class="invest-periodo">por mês · primeiro mês contratado de forma independente</p>
+      <ul class="invest-lista">
+        <li>Gestão completa de <strong>Instagram e TikTok</strong></li>
+        <li>4 a 5 posts por semana no Instagram</li>
+        <li>2 a 3 vídeos por semana no TikTok</li>
+        <li>Você grava, a gente edita e publica</li>
+        <li>Reestruturação completa do perfil</li>
+        <li>Identidade narrativa e frase de impacto da marca</li>
+        <li>Roteiros mensais de conteúdo</li>
+        <li>Calendário sazonal estratégico</li>
+        <li>Monitoramento e relatório mensal</li>
+      </ul>
+    </div>
+    <div class="invest-incluso">
+      <p class="invest-incluso-titulo">Bônus incluídos nessa proposta</p>
+      <ul class="invest-incluso-lista">
+        <li>Site institucional com catálogo da marca</li>
+        <li>Guia de voz e linguagem da marca</li>
+        <li>Estratégia de fidelização de clientes</li>
+        <li>Reunião mensal de alinhamento e resultados</li>
+      </ul>
+      <div style="margin-top: 32px; padding: 20px; background: var(--cinza-claro);">
+        <p style="font-size: 12px; font-weight: 300; color: var(--cinza); line-height: 1.7; font-style: italic;">O valor de R$550 é o investimento de lançamento para os primeiros 90 dias. Uma parceria pensada para crescer junto com o seu negócio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <p class="cta-eyebrow">Próximo passo</p>
+  <h2 class="cta-titulo">Pronta para transformar<br>sentimento em <em>presença?</em></h2>
+  <p class="cta-sub">Ao confirmar, alinhamos data de início, data de pagamento e enviamos o contrato. Tudo descrito aqui vira compromisso assinado.</p>
+  <a href="https://wa.me/5511944906572?text=Oi%20Daniela%2C%20li%20a%20proposta%20completa%20e%20quero%20come%C3%A7ar.%20Vamos%20l%C3%A1!" target="_blank" class="cta-btn">Vamos começar</a>
+</div>
+
+<!-- ASSINATURA -->
+<div class="assinatura">
+  <p class="assinatura-nome">Daniela Paiva</p>
+  <p class="assinatura-cargo">Estrategista Digital</p>
+  <p class="assinatura-frase">"Sua história já existe. Meu trabalho é fazer o mundo conhecer ela."</p>
+  <div class="assinatura-contato">
+    <div><label>Instagram</label><span>@danielapaiva.co</span></div>
+    <div><label>WhatsApp</label><span>(11) 94490-6572</span></div>
+  </div>
+</div>
+
+<script>
+function showCanal(idx, btn) {
+  document.querySelectorAll('#canais .tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#canais .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('canal-' + idx).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
